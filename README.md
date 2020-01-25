@@ -42,13 +42,16 @@ The `harder_challenge.mp4` video is another challenging video!
 [image2-in]: ./test_images/straight_lines1.jpg "Road test"
 [image2-out]: ./output_images/straight_lines1_undistort_output.jpg "Road Undistorted"
 [image3]: ./output_images/straight_lines1_thresholding_output.jpg "Binary Example"
-[image4-SobelXY]: ./output_images/straight_lines1_Sobel_X_Y_output.jpg "Sobel Gradients"
 
-[image5-Sobel-Magnitude]: ./output_images/straight_lines1_Sobel_magnitude_output.jpg
+[image-SobelX]: ./output_images/straight_lines1_sobel_x.jpg "Sobel X Gradient"
 
-[image6-Sobel-Direction]: ./output_images/straight_lines1_Sobel_direction_output.jpg
+[image-SobelY]: ./output_images/straight_lines1_sobel_y.jpg "Sobel Y Gradient"
 
-[image7-Sobel-Threshold-S]: ./output_images/straight_lines1_threshold_s_output.jpg
+[image-Sobel-Magnitude]: ./output_images/straight_lines1_sobel_magnitude.jpg "Sobel Gradient Magnitude"
+
+[image-Sobel-Direction]: ./output_images/straight_lines1_sobel_direction.jpg "Sobel Gradient Direction"
+
+[image-Sobel-S]: ./output_images/straight_lines1_hls.jpg "S"
 
 [video1]: ./project_video.mp4 "Video"
 
@@ -91,18 +94,23 @@ The code for thresholding steps are at cells #8 through #18 in `Project.ipynb`. 
 
 ##### Sobel Gradients
 Sobelx and Sobely are horizontal and vertical gradients (changes in color or darkness). I calculated the Sobel gradient of an image using cv2.Sobel(). I used Sobelx for the final pipeline with thresholds of 20 and 100.
-![alt text][image4-SobelXY]
+
+Here's an example of the x and y Sobel gradients.  
+![alt text][image-SobelX]
+![alt text][image-SobelY]
 
 ##### Magnitude of the Sobel Gradients
-This uses the square root of the combined squares of Sobelx and Sobely.
-This method doesn't detect the yellow lane.
-![alt text][image5-Sobel-Magnitude]
+This uses the square root of the combined squares of Sobelx and Sobely. This method doesn't detect the yellow lane.
+Here's an example of the magnitude of Sobel gradients.  
+![alt text][image-Sobel-Magnitude]
 
 ##### Direction of the Gradients
-![alt text][image6-Sobel-Direction]
+Here's an example of the magnitude of Sobel directions.  
+![alt text][image-Sobel-Direction]
 
 ##### HLS and Color thresholds
-![alt text][image7-Sobel-Threshold-S]
+Here's an example of thresholding on S-channel.  
+![alt text][image-Sobel-S]
 
 
 
