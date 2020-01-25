@@ -44,9 +44,12 @@ The `harder_challenge.mp4` video is another challenging video!
 [image3]: ./output_images/straight_lines1_thresholding_output.jpg "Binary Example"
 [image4-SobelXY]: ./output_images/straight_lines1_Sobel_X_Y_output.jpg "Sobel Gradients"
 
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
+[image5-Sobel-Magnitude]: ./output_images/straight_lines1_Sobel_magnitude_output.jpg
+
+[image6-Sobel-Direction]: ./output_images/straight_lines1_Sobel_direction_output.jpg
+
+[image7-Sobel-Threshold-S]: ./output_images/straight_lines1_threshold_s_output.jpg
+
 [video1]: ./project_video.mp4 "Video"
 
 
@@ -75,14 +78,14 @@ Now, we use the camera parameters that we calculated in the previous step to und
 
 The code for this step is contained in cell #11 of `Project.ipynb`.  
 
-To demonstrate this step, I apply the distortion correction to a test image.
+Here's an example of the output for this step:
 ![alt text][image2-out]
 
 
 ### Thresholding with Color Transforms and Gradients
 
 I used a combination of color and gradient thresholds to generate a binary image that clearly shows the lanes on the road.
-The code for thresholding steps are at cells #8 through #18 in `Project.ipynb`. Here's an example of my output for this step.  
+The code for thresholding steps are at cells #8 through #18 in `Project.ipynb`. Here's an example of the output for this step.  
 
 ![alt text][image3]
 
@@ -93,14 +96,13 @@ Sobelx and Sobely are horizontal and vertical gradients (changes in color or dar
 ##### Magnitude of the Sobel Gradients
 This uses the square root of the combined squares of Sobelx and Sobely.
 This method doesn't detect the yellow lane.
+![alt text][image5-Sobel-Magnitude]
 
 ##### Direction of the Gradients
+![alt text][image6-Sobel-Direction]
 
-##### Combining Thresholds
 ##### HLS and Color thresholds
-##### Combining Color and Gradients
-
-
+![alt text][image7-Sobel-Threshold-S]
 
 
 
