@@ -1,2 +1,2 @@
 *.HTML linguist-detectable=false
-*.ipynb Notebook  linguist-detectable=true
+*.ipynb linguist-detectable=true
