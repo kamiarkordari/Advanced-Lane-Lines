@@ -42,6 +42,7 @@ The `harder_challenge.mp4` video is another challenging video!
 [image2-in]: ./test_images/straight_lines1.jpg "Road test"
 [image2-out]: ./output_images/straight_lines1_undistort_output.jpg "Road Undistorted"
 [image3]: ./output_images/straight_lines1_thresholding_output.jpg "Binary Example"
+[image4-SobelXY]: ./output_images/straight_lines1_Sobel_X_Y_output.jpg "Sobel Gradients"
 
 [image4]: ./examples/warped_straight_lines.jpg "Warp Example"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
@@ -72,12 +73,9 @@ Pipeline (single images)
 
 Now, we use the camera parameters that we calculated in the previous step to undistort road image.
 
-The code for this step is contained in cells #11 of `Project.ipynb`.  
+The code for this step is contained in cell #11 of `Project.ipynb`.  
 
-To demonstrate this step, I apply the distortion correction to this test image:
-![alt text][image2-in]
-
-Here is the result after distortion correction:
+To demonstrate this step, I apply the distortion correction to a test image.
 ![alt text][image2-out]
 
 
@@ -89,9 +87,8 @@ The code for thresholding steps are at cells #8 through #18 in `Project.ipynb`. 
 ![alt text][image3]
 
 ##### Sobel Gradients
-Sobelx and Sobely are horizontal and vertical gradients (changes in color or darkness). I used Sobelx for the final pipeline with thresholds of 20 and 100.
-
-[INSERT IMAGE HERE]
+Sobelx and Sobely are horizontal and vertical gradients (changes in color or darkness). I calculated the Sobel gradient of an image using cv2.Sobel(). I used Sobelx for the final pipeline with thresholds of 20 and 100.
+![alt text][image4-SobelXY]
 
 ##### Magnitude of the Sobel Gradients
 This uses the square root of the combined squares of Sobelx and Sobely.
