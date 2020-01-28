@@ -238,7 +238,7 @@ Here is an example image of my result plotted back down onto the road.
 I implemented this step in cells #27 in my code in `Project.ipynb` in the function `process_image()`.  
 
 
-### 7. Pipeline (video)
+### 7. Pipeline (Video)
 
 Here is an example of the final video.  The pipeline performed reasonably well on the entire project video. There were wobbly lines at some times that are ok but there were no catastrophic failures that would cause the car to drive off the road.
 
