@@ -231,7 +231,7 @@ We then calculate the position of the vehicle with respect to center of the lane
 The code for curvature calculation and vehicle position from center is in cell #54 in the Jupyter Notebook.
 
 
-### 6. Overlaid Lanes on Image
+### 6. Overlay Lanes on Image
 Here is an example image of my result plotted back down onto the road.
 
 ![alt text][image-Pipeline]
@@ -244,11 +244,10 @@ I implemented this step in cells #27 in my code in `Project.ipynb` in the functi
 Here is an example of the final video.  The pipeline performed reasonably well on the entire project video. There were wobbly lines at some times that are ok but there were no catastrophic failures that would cause the car to drive off the road.
 
 
-[![Video Output][image-video-screenshot]](https://www.youtube.com/watch?v=FzQhJcWMSJs)
-![Video Output][[video-Standard-gif]]
+![Video Output][video-Standard-gif]
 
 ### 8. Improve results
-The pipeline didn't perform well on the challenge video. I applied these improvements to the pipeline.
+The pipeline didn't perform well on the challenge video. I applied these improvements to the pipeline to improve the results.
 1. Average results to smooth out the parameter estimations over multiple frames
 2. Mask image out of a target area
 3. Reset and start over if lines don't pass some criteria
@@ -258,18 +257,18 @@ The pipeline didn't perform well on the challenge video. I applied these improve
 This project shows that with just a camera and some simple image processing we can extract valuable information from an image or video that can potentially be fed into more sophisticated self-driving car algorithms.  
 
 
-
 #### Shortcomings
 The pipeline will likely fail in this scenarios:
 1. Sharp turns and large curvatures
 2. Going up or down the hill
 3. Lane marketings that are not clearly visible due to color contrast
-4. Lane obstruction by other cars,
+4. Lane obstruction by other cars
 
 #### Improvements
-What could I do to make it more robust?
-1. Force constrains when fitting polynomials. For example, we know that the two lanes must be parallel. In the current pipeline we are finding the left and right polynomials independent of each other.
+What can we do to make the pipeline more robust? Here are a few suggestions:
+1. Force constrains when fitting polynomials. In the current pipeline we are finding the left and right polynomials independent of each other. For example, we can force the two polynomials to be parallel to each other.
 2. Calculate a confidence number for each line and discard lines that have low confidence number.
 3. Normalize image to minimize issues in frames that are too bright or too dark.
 4. Use color thresholding for detecting white and yellow lines separately and then combine them for better lane pixel selection.
 5. Improve warping by selecting better source points
+6. Impose a maximum change in parameters from one from to another. For example, polynomial parameter cannot change more than 5% from one frame to another.
