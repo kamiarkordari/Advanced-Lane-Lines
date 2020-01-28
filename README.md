@@ -57,6 +57,8 @@ The `harder_challenge.mp4` video is another challenging video!
 
 [image-Top-Down]: ./output_images/straight_lines1_top_down_output.jpg "Top Down"
 
+[image-Polynomial]: ./output_images/straight_lines1_polynomial_output.jpg "Polynomial Fit"
+
 [video1]: ./project_video.mp4 "Video"
 
 
@@ -174,14 +176,41 @@ And here is the output after thresholding and perspective transformation.
 
 I implemented an algorithms to identify lane lines pixels in a frame and fit 2nd order polynomials to each of the right and left lanes.
 
-The algorithm works differently for the first frame and subsequent frames.
+##### Lanes Finding Method: Peaks in the Histogram
+We apply the following steps to the thresholded warped image to map out the lane lines. We plot a histogram of where the binary activations occur across the image. We first normalize each pixel value to 0-1 and calculate the histogram for the lower half of the image by calculating the sum across pixels vertically. The most prominent peaks in the this histogram are good indicators of the x-position of the base of the lane lines.
 
-##### Lanes in the First Frame
-We apply the
-1. Take only the bottom half of the image
+``` python
+bottom_half = img[img.shape[0]//2:,:]
+histogram = np.sum(bottom_half, axis=0)
+```
 
-##### Lanes in the Subsequent Frames
+##### Sliding Window
+We use the x-position of the base of the lane lines at the bottom of the image as the starting point to where to search for the lines. From that point, we can use a sliding window, placed around the line centers to find and follow the lines up to the to of the frame.  
 
+We split the histogram for the two lines. Then, we set up a few hyperparamters for the sliding windows.
+
+``` python
+# Choose the number of sliding windows
+nwindows = 9
+# Set the width of the windows +/- margin
+margin = 150
+# Set minimum number of pixels found to recenter window
+minpix = 50
+```
+
+We then loop through each window and keep track of the activated pixels that fall into these windows.
+
+##### Fit a Polynomial
+After finding all the pixels that belong to each line, we fit a polynomial to the line.
+
+``` python
+left_fit = np.polyfit(lefty, leftx, 2)
+right_fit = np.polyfit(righty, rightx, 2)
+```
+
+![alt text][image-Polynomial]
+
+##### Fit a Polynomial
 
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
