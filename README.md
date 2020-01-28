@@ -59,7 +59,10 @@ The `harder_challenge.mp4` video is another challenging video!
 
 [image-Polynomial]: ./output_images/straight_lines1_polynomial_output.jpg "Polynomial Fit"
 
-[video1]: ./project_video.mp4 "Video"
+[image-Pipeline]: ./output_images/test4_pipeline_output.jpg "Pipeline Output"
+
+[video-Standard]: ./output_project_video.mp4 "Project Video"
+[image-video-screenshot]: ./output_images/video_screenshot.jpg "Project Video"
 
 
 Details
@@ -172,12 +175,12 @@ Here is an example of the output after perspective transformation.
 And here is the output after thresholding and perspective transformation.
 ![alt text][image-Top-Down]
 
-### 4. Identify Lane-Line Pixels
+### 4. Finding Lane-Line
 
 I implemented an algorithms to identify lane lines pixels in a frame and fit 2nd order polynomials to each of the right and left lanes.
 
 ##### Lanes Finding Method: Peaks in the Histogram
-We apply the following steps to the thresholded warped image to map out the lane lines. We plot a histogram of where the binary activations occur across the image. We first normalize each pixel value to 0-1 and calculate the histogram for the lower half of the image by calculating the sum across pixels vertically. The most prominent peaks in the this histogram are good indicators of the x-position of the base of the lane lines.
+We apply the following process to the thresholded warped image to map out the lane lines. We plot a histogram of where the binary activations occur across the image. We first normalize each pixel value to 0-1 and calculate the histogram for the lower half of the image by calculating the sum across pixels vertically. The most prominent peaks in the this histogram are good indicators of the x-position of the base of the lane lines.
 
 ``` python
 bottom_half = img[img.shape[0]//2:,:]
@@ -210,31 +213,44 @@ right_fit = np.polyfit(righty, rightx, 2)
 
 ![alt text][image-Polynomial]
 
-##### Fit a Polynomial
+##### Skip the Sliding Windows Step Once The Lines Are Found
+To increase efficiency in finding lines in a video, we don't start fresh on every frame. We search in a margin around the previous lane line position. If we lose track of the lines, we can go back to the sliding windows search to start over.
 
 
-#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+### 5. Measuring Curvature
+Next, I calculated the radius of the 2nd order polynomial lane lines. We need to convert this value from pixel space to meter space. This requires to make assumptions about the length and width of the section of the lane in the real world. We assume that if you're projecting a section of lane similar to the images we have used, the lane is about 30 meters long and 3.7 meters wide. Therefore, to convert from pixels to real-world meter measurements, we can use:
 
-I did this in lines # through # in my code in `my_other_file.py`
+``` python
+ym_per_pix = 30/720 # meters per pixel in y dimension
+xm_per_pix = 3.7/700 # meters per pixel in x dimension  
+```
 
-#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+We then calculate the position of the vehicle with respect to center of the lane.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+The code for curvature calculation and vehicle position from center is in cell #54 in the Jupyter Notebook.
 
-![alt text][image6]
+
+### 6. Overlaid Lanes on Image
+Here is an example image of my result plotted back down onto the road.
+
+![alt text][image-Pipeline]
+
+I implemented this step in cells #27 in my code in `Project.ipynb` in the function `process_image()`.  
+
+
+### 7. Pipeline (video)
+
+Here is an example of the final video.  The pipeline performed reasonably well on the entire project video. There were wobbly lines at some times that are ok but there were no catastrophic failures that would cause the car to drive off the road.
+
+
+[![Video Output][image-video-screenshot]](https://www.youtube.com/watch?v=FzQhJcWMSJs)
+
 
 ---
-
-### Pipeline (video)
-
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
-
-Here's a [link to my video result](./project_video.mp4)
-
----
-
 ### Discussion
 
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Shortcomings
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+Problems / issues I faced in the implementation of this project:  
+
+Where will the pipeline likely fail?  What could I do to make it more robust?
