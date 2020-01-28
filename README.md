@@ -53,6 +53,10 @@ The `harder_challenge.mp4` video is another challenging video!
 
 [image-Sobel-S]: ./output_images/straight_lines1_hls.jpg "S"
 
+[image-Perspective]: ./output_images/straight_lines1_perspective_transform_output.jpg "Perspective Transformed"
+
+[image-Top-Down]: ./output_images/straight_lines1_top_down_output.jpg "Top Down"
+
 [video1]: ./project_video.mp4 "Video"
 
 
@@ -75,7 +79,7 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 Pipeline (single images)
 ---
-### Distortion Correction
+### 1. Distortion Correction
 
 Now, we use the camera parameters that we calculated in the previous step to undistort road image.
 
@@ -85,7 +89,7 @@ Here's an example of the output for this step:
 ![alt text][image2-out]
 
 
-### Thresholding with Color Transforms and Gradients
+### 2. Thresholding with Color Transforms and Gradients
 
 I used a combination of color and gradient thresholds to generate a binary image that clearly shows the lanes on the road.
 The code for thresholding steps are at cells #8 through #18 in `Project.ipynb`. Here's an example of the output for this step.  
@@ -93,62 +97,92 @@ The code for thresholding steps are at cells #8 through #18 in `Project.ipynb`. 
 ![alt text][image3]
 
 ##### Sobel Gradients
-Sobelx and Sobely are horizontal and vertical gradients (changes in color or darkness). I calculated the Sobel gradient of an image using cv2.Sobel(). I used Sobelx for the final pipeline with thresholds of 20 and 100.
+Sobelx and Sobely are horizontal and vertical gradients (changes in color or darkness). I applied threshold on Sobel gradient of the image using cv2.Sobel().
 
-Here's an example of the x and y Sobel gradients.  
+``` python
+sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)  
+```
+
+I used Sobelx for the final pipeline with thresholds of 20 and 100.
+
+Here's an example of thresholding the x and y Sobel gradients.  
 ![alt text][image-SobelX]
 ![alt text][image-SobelY]
 
 ##### Magnitude of the Sobel Gradients
-This uses the square root of the combined squares of Sobelx and Sobely. This method doesn't detect the yellow lane.
-Here's an example of the magnitude of Sobel gradients.  
+For this I used thresholding on the square root of the combined squares of `sobelx` and `sobely`.  
+
+``` python
+gradmag = np.sqrt(sobelx**2 + sobely**2)
+```
+
+Here's an example of thresholding the magnitude of Sobel gradients.  
 ![alt text][image-Sobel-Magnitude]
 
 ##### Direction of the Gradients
-Here's an example of the magnitude of Sobel directions.  
+For this I used thresholding on gradient direction.  
+
+``` python
+absgraddir = np.arctan2(np.absolute(sobely), np.absolute(sobelx))
+```
+
+
+Here's an example of the thresholding on the direction of Sobel directions.  
 ![alt text][image-Sobel-Direction]
 
 ##### HLS and Color thresholds
+I extracted S channel of image representation in the HLS color space and then applied a threshold on its absolute value.
+
+``` python
+hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+s_channel = hls[:,:,2]
+```
+
 Here's an example of thresholding on S-channel.  
 ![alt text][image-Sobel-S]
 
 
 
-#### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+### 3. Perspective Transform
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
-
-```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
-```
-
-This resulted in the following source and destination points:
+The code for my perspective transform includes a function called `unwarp()`, which appears in cell #5 in `Project.ipynb`.  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose to hardcode the source and destination points with the following coordinates.
 
 | Source        | Destination   |
 |:-------------:|:-------------:|
-| 585, 460      | 320, 0        |
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+| 585, 455      | 200, 0        |
+| 695, 455      | 1080, 0      |
+| 1125, 720     | 1080, 720      |
+| 185, 720      | 200, 720        |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![alt text][image4]
+The transformation is applied using
 
-#### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+``` python
+M = cv2.getPerspectiveTransform(src, dst)
+warped = cv2.warpPerspective(img, M, img_size)
+```
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+Here is an example of the output after perspective transformation.
+![alt text][image-Perspective]
 
-![alt text][image5]
+And here is the output after thresholding and perspective transformation.
+![alt text][image-Top-Down]
+
+### 4. Identify Lane-Line Pixels
+
+I implemented an algorithms to identify lane lines pixels in a frame and fit 2nd order polynomials to each of the right and left lanes.
+
+The algorithm works differently for the first frame and subsequent frames.
+
+##### Lanes in the First Frame
+We apply the
+1. Take only the bottom half of the image
+
+##### Lanes in the Subsequent Frames
+
+
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
