@@ -62,6 +62,7 @@ The `harder_challenge.mp4` video is another challenging video!
 [image-Pipeline]: ./output_images/test4_pipeline_output.jpg "Pipeline Output"
 
 [video-Standard]: ./output_project_video.mp4 "Project Video"
+[video-Standard-gif]: ./output_images/output_project_video.gif "Project Video GIF"
 [image-video-screenshot]: ./output_images/video_screenshot.jpg "Project Video"
 
 
@@ -244,13 +245,31 @@ Here is an example of the final video.  The pipeline performed reasonably well o
 
 
 [![Video Output][image-video-screenshot]](https://www.youtube.com/watch?v=FzQhJcWMSJs)
+![Video Output][[video-Standard-gif]]
 
+### 8. Improve results
+The pipeline didn't perform well on the challenge video. I applied these improvements to the pipeline.
+1. Average results to smooth out the parameter estimations over multiple frames
+2. Mask image out of a target area
+3. Reset and start over if lines don't pass some criteria
 
 ---
 ### Discussion
+This project shows that with just a camera and some simple image processing we can extract valuable information from an image or video that can potentially be fed into more sophisticated self-driving car algorithms.  
 
-#### 1. Shortcomings
 
-Problems / issues I faced in the implementation of this project:  
 
-Where will the pipeline likely fail?  What could I do to make it more robust?
+#### Shortcomings
+The pipeline will likely fail in this scenarios:
+1. Sharp turns and large curvatures
+2. Going up or down the hill
+3. Lane marketings that are not clearly visible due to color contrast
+4. Lane obstruction by other cars,
+
+#### Improvements
+What could I do to make it more robust?
+1. Force constrains when fitting polynomials. For example, we know that the two lanes must be parallel. In the current pipeline we are finding the left and right polynomials independent of each other.
+2. Calculate a confidence number for each line and discard lines that have low confidence number.
+3. Normalize image to minimize issues in frames that are too bright or too dark.
+4. Use color thresholding for detecting white and yellow lines separately and then combine them for better lane pixel selection.
+5. Improve warping by selecting better source points
