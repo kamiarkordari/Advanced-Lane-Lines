@@ -2,8 +2,7 @@
 
 #### Udacity Self-Driving Car Engineer Nanodegree Project
 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
-![Lanes Image](./examples/example_output.jpg)
+![Video Output][video-Standard-gif]
 
 Project Summary
 ---
@@ -249,7 +248,7 @@ Here is an example of the final video.  The pipeline performed reasonably well o
 ### 8. Improving results
 The pipeline didn't perform well on the challenge video. I applied these improvements to the pipeline to improve the results.
 1. Use a low-pass filter to smooth the lane parameters over frames. I did this by adding each new detection to a weighted mean of the position of the lines to avoid jitter.
-2. Outlier rejection 
+2. Outlier rejection
 3. Reset and start over if lines don't pass some criteria
 
 ---
