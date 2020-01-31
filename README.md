@@ -224,7 +224,7 @@ Here is an example of the final video.  The pipeline performed reasonably well o
 
 ![Video Output][video-Standard-gif]
 
-### 8. Improving results
+### 8. Improving Results
 The pipeline didn't perform well on the challenging videos. I applied these improvements to the pipeline to improve the results.
 1. **Sanity Check**: When I calculate the new parameters for a new frame I check to make sure the parameters make sense. I considered these sanity checks for this purpose:
 
