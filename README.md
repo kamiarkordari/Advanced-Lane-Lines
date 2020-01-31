@@ -232,10 +232,15 @@ The pipeline didn't perform well on the challenging videos. I applied these impr
 - Checking that the left and right lines are separated by approximately the right distance horizontally
 - Checking that left and right lines are roughly parallel
 
-
 2. **Reset**: If sanity checks reveal that the lane lines are problematic, I retain the previous positions from the frame prior and step to the next frame to search again. If I lose the lines for several frames in a row (currently set to 10), I start searching from scratch using a histogram and sliding window.
 
 3. **Smoothing**: Line detections will jump around from frame to frame a bit and it can be preferable to smooth it to obtain a cleaner result. I use a weighted moving average low-pass filter to smooth the lane parameters over frames. I do weighted average of the new parameters and the parameters from the last frame.
+
+
+
+Here are the video results for the challenging videos:
+- [Link for the result for the challenge Video](https://youtu.be/mUciU6xAYUE)
+- [Link for the result for the hard challenge Video](https://youtu.be/6xxZNdJF4RQ)
 
 ---
 ### Discussion
